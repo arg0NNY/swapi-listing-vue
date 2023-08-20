@@ -1,6 +1,6 @@
 <template>
   <AsyncWrapper :status="status" :error="error">
-    <PeopleTable v-if="people" :people="[people]" :favorite="favorite" />
+    <PeopleTable v-if="people" :people="[people]" v-model:favorite="favorite" />
   </AsyncWrapper>
 </template>
 

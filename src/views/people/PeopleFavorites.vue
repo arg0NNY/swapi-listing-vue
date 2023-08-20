@@ -1,4 +1,5 @@
 <template>
+  <h1>Favorites</h1>
   <PeopleTable :people="favorite" v-model:favorite="favorite" />
 </template>
 

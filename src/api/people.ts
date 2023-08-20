@@ -4,7 +4,7 @@ import type { SwapiPaginate, SwapiPeople } from '@/api/types'
 import { transformPeople } from '@/utils/swapi'
 
 export async function searchPeople (search?: string): Promise<People[]> {
-  const data = (await request.get('/people')) as SwapiPaginate<SwapiPeople>
+  const data = (await request.get('/people', { params: { search } })) as SwapiPaginate<SwapiPeople>
   return data.results.map(transformPeople)
 }
 
