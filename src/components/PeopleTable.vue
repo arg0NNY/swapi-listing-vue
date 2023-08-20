@@ -14,6 +14,14 @@
         <td>{{ p.height }}</td>
         <td>{{ p.mass }}</td>
         <td>{{ p.hair_color }}</td>
+        <td v-if="favorite">
+          <button
+            class="star-btn"
+            :class="{ 'star-btn--starred': isStarred(p) }"
+            @click="star(p)"
+            data-test="star-btn"
+          >⭐</button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -21,10 +29,29 @@
 
 <script setup lang="ts">
 import type { People } from '@/types'
+import { computed } from 'vue'
 
 const props = defineProps<{
-  people: People[]
+  people: People[],
+  favorite?: People[]
 }>()
+const emit = defineEmits<{
+  'update:favorite': [People[] | undefined]
+}>()
+
+const favorite = computed({
+  get: () => props.favorite,
+  set: value => emit('update:favorite', value)
+})
+
+const isStarred = (p: People) => !!favorite.value?.some(f => f.id === p.id)
+
+function star (p: People) {
+  if(!favorite.value) return
+
+  if (isStarred(p)) favorite.value = favorite.value!.filter(f => f.id !== p.id)
+  else favorite.value = favorite.value!.concat(p)
+}
 </script>
 
 <style scoped lang="scss">
@@ -34,5 +61,12 @@ table, th, td {
 }
 th, td {
   padding: 10px;
+}
+
+.star-btn {
+  filter: grayscale(1);
+  &--starred {
+    filter: none;
+  }
 }
 </style>
